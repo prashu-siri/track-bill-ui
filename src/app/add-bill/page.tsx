@@ -62,14 +62,10 @@ const AddBillsForm: React.FC = () => {
 				<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
 					<h2 className={styles.title}>Add a New Bill</h2>
 					{successMessage && (
-						<div className="mb-4 p-4 text-center text-white bg-green-500 rounded-lg">
-							{successMessage}
-						</div>
+						<div className="success-message">{successMessage}</div>
 					)}
 					{errorMessage && (
-						<div className="mb-4 p-4 text-center text-white bg-red-500 rounded-lg">
-							{errorMessage}
-						</div>
+						<div className="error-message">{errorMessage}</div>
 					)}
 					<div className={styles.formGroup}>
 						<label>Date:</label>

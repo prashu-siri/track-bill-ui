@@ -88,7 +88,12 @@ export default function Home() {
 
 	return (
 		<div className={styles.page}>
-			<NavBar rightLinks={[{ href: "/add-bill", label: "Add Bill" }]} />
+			<NavBar
+				rightLinks={[
+					{ href: "/add-bill", label: "Add Bill" },
+					{ href: "/manage-bills", label: "Manage Bills" },
+				]}
+			/>
 			<main className={styles.main}>
 				<h1 className={styles.dashboardTitle}>Bills Dashboard</h1>
 				<div className={styles.filters}>

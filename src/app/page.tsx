@@ -8,7 +8,7 @@ type Bill = {
 	id: number;
 	date: string; // ISO date string
 	type: string;
-	amount: number;
+	amount: string;
 	status: string;
 };
 
@@ -144,11 +144,7 @@ export default function Home() {
 												<td>{bill.type}</td>
 												<td>
 													{formatter.format(
-														parseFloat(
-															bill.amount.toFixed(
-																2
-															)
-														)
+														parseFloat(bill.amount)
 													)}
 												</td>
 												<td>

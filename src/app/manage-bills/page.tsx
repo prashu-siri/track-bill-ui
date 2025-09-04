@@ -13,16 +13,16 @@ interface Bill {
 }
 
 const ManageBillsPage = () => {
-	const [bills, setBills] = useState<Bill[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
-	const [successMessage, setSuccessMessage] = useState("");
-	const [errorMessage, setErrorMessage] = useState("");
-	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-	const [billToDelete, setBillToDelete] = useState(null);
-	const [editMessage, setEditMessage] = useState("");
+  const [bills, setBills] = useState<Bill[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [billToDelete, setBillToDelete] = useState<number | null>(null);
+  const [editMessage, setEditMessage] = useState("");
 
-	const fetchBills = async () => {
+  const fetchBills = async () => {
 		setLoading(true);
 		setError(null);
 		try {
@@ -34,26 +34,28 @@ const ManageBillsPage = () => {
 			}
 			const data = await response.json();
 			setBills(data);
-		} catch (err) {
-			console.error("Failed to fetch bills:", err);
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				console.error("Failed to fetch bills:", err);
+			}
 			setError(
 				"Failed to fetch bills. Please check the network connection and API status."
 			);
 		} finally {
 			setLoading(false);
 		}
-	};
+  };
 
-	useEffect(() => {
+  useEffect(() => {
 		fetchBills();
-	}, []);
+  }, []);
 
-	const handleDeleteClick = (id: any) => {
+  const handleDeleteClick = (id: number) => {
 		setBillToDelete(id);
 		setIsDeleteModalOpen(true);
-	};
+  };
 
-	const handleConfirmDelete = async () => {
+  const handleConfirmDelete = async () => {
 		try {
 			const response = await fetch(
 				`https://track-bill-api.onrender.com/api/bills/${billToDelete}`,
@@ -67,22 +69,24 @@ const ManageBillsPage = () => {
 			setSuccessMessage("Bill deleted successfully!");
 			setErrorMessage("");
 			fetchBills(); // Re-fetch the bills to update the list
-		} catch (err) {
+		} catch (err: unknown) {
 			setErrorMessage("Failed to delete bill. Please try again.");
 			setSuccessMessage("");
-			console.error("Failed to delete bill:", err);
+			if (err instanceof Error) {
+				console.error("Failed to delete bill:", err);
+			}
 		} finally {
 			setIsDeleteModalOpen(false);
 			setBillToDelete(null);
 		}
-	};
+  };
 
-	const handleCancelDelete = () => {
+  const handleCancelDelete = () => {
 		setIsDeleteModalOpen(false);
 		setBillToDelete(null);
-	};
+  };
 
-	const handleEdit = (bill: any) => {
+  const handleEdit = (bill: Bill) => {
 		setEditMessage(
 			`This is where you would edit the bill for: ${
 				bill.type
@@ -90,7 +94,7 @@ const ManageBillsPage = () => {
 		);
 		setSuccessMessage("");
 		setErrorMessage("");
-	};
+  };
 
 	if (loading) {
 		return (

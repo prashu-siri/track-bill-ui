@@ -81,6 +81,11 @@ export default function Home() {
 
 	const groupedBills = groupBillsByMonth(filteredBills);
 
+	const formatter = new Intl.NumberFormat("en-IN", {
+		style: "currency",
+		currency: "INR",
+	});
+
 	return (
 		<div className={styles.page}>
 			<NavBar rightLinks={[{ href: "/add-bill", label: "Add Bill" }]} />
@@ -138,7 +143,13 @@ export default function Home() {
 												</td>
 												<td>{bill.type}</td>
 												<td>
-													${bill.amount.toFixed(2)}
+													{formatter.format(
+														parseFloat(
+															bill.amount.toFixed(
+																2
+															)
+														)
+													)}
 												</td>
 												<td>
 													<span

@@ -58,7 +58,7 @@
 }
 
 /* Message styling */
-.success-message {
+.successMessage {
   margin-bottom: 1rem;
   padding: 1rem;
   text-align: center;
@@ -67,7 +67,7 @@
   border-radius: 0.5rem;
 }
 
-.error-message {
+.errorMessage {
   margin-bottom: 1rem;
   padding: 1rem;
   text-align: center;

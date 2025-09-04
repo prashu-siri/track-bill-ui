@@ -163,7 +163,7 @@ const ManageBillsPage = () => {
 			<NavBar
 				rightLinks={[
 					{ href: "/", label: "Home" },
-					{ href: "/add-bill", label: "Add Bill" }
+					{ href: "/add-bill", label: "Add Bill" },
 				]}
 			/>
 			<div className="container">
@@ -180,7 +180,7 @@ const ManageBillsPage = () => {
 					<div className={styles.infoMessage}>{editMessage}</div>
 				)}
 				{bills.length === 0 ? (
-					<p>No bills found. Add one from the "Add Bill" page.</p>
+					<p>No bills found. Add one from the Add Bill page.</p>
 				) : (
 					<ul className={styles.billList}>
 						{bills.map((bill) => (

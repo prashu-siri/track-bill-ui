@@ -57,6 +57,30 @@
   background: var(--surface);
 }
 
+/* Message styling */
+.success-message {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  text-align: center;
+  color: #fff;
+  background-color: #22c55e;
+  border-radius: 0.5rem;
+}
+
+.error-message {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  text-align: center;
+  color: #fff;
+  background-color: #ef4444;
+  border-radius: 0.5rem;
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 0.875rem;
+}
+
 .button {
   padding: 0.9rem 1rem;
   background: var(--primary);

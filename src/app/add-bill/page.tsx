@@ -58,19 +58,19 @@ const AddBillsForm: React.FC = () => {
 	return (
 		<>
 			<NavBar rightLinks={[{ href: "/", label: "Home" }]} />
-			{successMessage && (
-				<div className="mb-4 p-4 text-center text-white bg-green-500 rounded-lg">
-					{successMessage}
-				</div>
-			)}
-			{errorMessage && (
-				<div className="mb-4 p-4 text-center text-white bg-red-500 rounded-lg">
-					{errorMessage}
-				</div>
-			)}
 			<div className={styles.formContainer}>
 				<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
 					<h2 className={styles.title}>Add a New Bill</h2>
+					{successMessage && (
+						<div className="mb-4 p-4 text-center text-white bg-green-500 rounded-lg">
+							{successMessage}
+						</div>
+					)}
+					{errorMessage && (
+						<div className="mb-4 p-4 text-center text-white bg-red-500 rounded-lg">
+							{errorMessage}
+						</div>
+					)}
 					<div className={styles.formGroup}>
 						<label>Date:</label>
 						<input

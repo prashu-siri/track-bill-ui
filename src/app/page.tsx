@@ -58,7 +58,7 @@ export default function Home() {
 	useEffect(() => {
 		// Replace with your actual API endpoint
 
-		fetch("/api/bills")
+		fetch("https://track-bill-api.onrender.com/api/bills")
 			.then((res) => res.json())
 			.then((data) => {
 				setBills(data);

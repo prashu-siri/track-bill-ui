@@ -1,0 +1,94 @@
+.formContainer {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+}
+
+.form {
+  background: var(--surface);
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(30, 42, 120, 0.08);
+  min-width: 320px;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-weight: 500;
+  color: var(--text-label);
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.01em;
+}
+
+.input {
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--primary-light);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f9fbfc;
+  color: var(--text-main);
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  outline: none;
+  background: var(--surface);
+}
+
+.button {
+  padding: 0.9rem 1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+
+.button:hover {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.error {
+  color: var(--error);
+  font-size: 0.95rem;
+  margin-top: -0.3rem;
+}
+
+@media (max-width: 600px) {
+  .formContainer {
+    padding: 1rem;
+    min-height: 100vh;
+  }
+  .form {
+    padding: 1.2rem 0.5rem;
+    min-width: unset;
+    max-width: 100vw;
+  }
+}

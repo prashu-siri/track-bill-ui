@@ -1,0 +1,43 @@
+.navbar {
+  width: 100vw;
+  min-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: 0 4px 16px rgba(30, 42, 120, 0.08), 0 1.5px 4px rgba(30, 42, 120, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navText {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.navLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navLink {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.navLink:hover {
+  background: var(--accent);
+  color: var(--surface);
+}

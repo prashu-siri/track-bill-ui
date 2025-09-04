@@ -1,6 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #1e2a78;
+  --primary-light: #eaf0fa;
+  --accent: #ffb347;
+  --background: #f5f7fa;
+  --surface: #fff;
+  --text-main: #222b45;
+  --text-label: #1e2a78;
+  --error: #d32f2f;
+  --font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,7 +28,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

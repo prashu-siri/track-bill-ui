@@ -1,0 +1,99 @@
+'use client';
+import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import NavBar from '../../components/NavBar';
+import styles from './addBill.module.css';
+
+type BillFormInputs = {
+  date: string;
+  type: string;
+  amount: number;
+  status: string;
+};
+
+const AddBillsForm: React.FC = () => {
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<BillFormInputs>();
+
+  const onSubmit: SubmitHandler<BillFormInputs> = (data) => {
+    // Handle form submission logic here
+    fetch('/api/bills', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+      .then(response => {
+      if (!response.ok) throw new Error('Failed to add bill');
+      return response.json();
+      })
+      .then(result => {
+      // Optionally handle success (e.g., show a message)
+      console.log('Bill added:', result);
+      })
+      .catch(error => {
+      // Optionally handle error (e.g., show an error message)
+      console.error(error);
+      });
+    reset();
+  };
+
+  return (
+    <>
+      <NavBar
+        rightLinks={[{ href: '/', label: 'Home' }]}
+      />
+      <div className={styles.formContainer}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+          <h2 className={styles.title}>Add a New Bill</h2>
+          <div className={styles.formGroup}>
+            <label>Date:</label>
+            <input
+              type="date"
+                {...register('date', { required: true })}
+                className={styles.input}
+                onFocus={e => e.target.showPicker && e.target.showPicker()}
+              />
+            {errors.date && <span className={styles.error}>Date is required</span>}
+          </div>
+          <div className={styles.formGroup}>
+            <label>Status:</label>
+            <select
+              {...register('status', { required: true })}
+              className={styles.input}
+            >
+              <option value="">Select status</option>
+              <option value="paid">Paid</option>
+              <option value="unpaid">Unpaid</option>
+              <option value="pending">Pending</option>
+            </select>
+            {errors.status && <span className={styles.error}>Status is required</span>}
+          </div>
+          <div className={styles.formGroup}>
+            <label>Type:</label>
+            <input
+              type="text"
+              {...register('type', { required: true })}
+              className={styles.input}
+              placeholder="e.g. Electricity"
+            />
+            {errors.type && <span className={styles.error}>Type is required</span>}
+          </div>
+          <div className={styles.formGroup}>
+            <label>Amount:</label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              {...register('amount', { required: true, min: 0 })}
+              className={styles.input}
+              placeholder="e.g. 100.00"
+            />
+            {errors.amount && <span className={styles.error}>Amount is required and must be &gt;= 0</span>}
+          </div>
+          <button type="submit" className={styles.button}>Add Bill</button>
+        </form>
+      </div>
+    </>
+  );
+};
+
+export default AddBillsForm;

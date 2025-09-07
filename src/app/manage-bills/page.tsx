@@ -25,9 +25,43 @@ const ManageBillsPage = () => {
 	const [editFormData, setEditFormData] = useState<Bill | null>(null);
 	const [editMessage, setEditMessage] = useState("");
 
+	const mockData: Bill[] = [
+		{
+			id: 3,
+			date: "2025-09-03",
+			status: "paid",
+			type: "Amazon Credit Card",
+			amount: "3919",
+		},
+		{
+			id: 4,
+			date: "2025-09-03",
+			status: "paid",
+			type: "ICICI credit card",
+			amount: "31627.85",
+		},
+		{
+			id: 5,
+			date: "2025-10-05",
+			status: "paid",
+			type: "Electricity ",
+			amount: "84",
+		},
+	];
+
+	const formatter = new Intl.NumberFormat("en-IN", {
+		style: "currency",
+		currency: "INR",
+	});
+
 	const fetchBills = async () => {
 		setLoading(true);
-		setError(null); // Uncomment below to fetch from actual API
+		setError(null);
+
+		// Uncomment below to fetch from mock
+		// setBills(mockData);
+		// setLoading(false);
+		// setLoading(false);
 
 		try {
 			const response = await fetch(
@@ -258,9 +292,11 @@ const ManageBillsPage = () => {
 															styles.billAmount
 														}
 													>
-														{" "}
-														Amount:
-														{bill.amount}
+														{formatter.format(
+															parseFloat(
+																bill.amount
+															)
+														)}
 													</span>
 													<span
 														className={
@@ -273,10 +309,13 @@ const ManageBillsPage = () => {
 														).toLocaleDateString()}
 													</span>
 													<span
-														className={`billStatus ${bill.status}`.toLowerCase()}
+														className={
+															styles.billStatus +
+															" " +
+															`${bill.status}`.toLowerCase()
+														}
 													>
-														Status:
-														{bill.status}
+														{bill.status.toUpperCase()}
 													</span>
 												</div>
 											</div>

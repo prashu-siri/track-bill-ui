@@ -28,16 +28,21 @@
 .billList {
   list-style-type: none;
   padding: 0;
-  box-shadow: 1px 5px 15px rgba(0, 0, 0, 0.25);
   margin: 1rem 2rem;
-  border-radius: 10px;
+  display: flex;
+  gap: 1rem;
 }
 .billItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid #eee;
+  box-shadow: 1px 5px 15px rgba(0,0,0,0.15);
+  border-radius: 10px;
+  background-color: #fff;
 }
 .billItem:last-child {
   border-bottom: none;
@@ -51,11 +56,10 @@
 }
 .billType {
   font-weight: bold;
-  color: #007bff;
 }
 .billAmount {
   font-weight: bold;
-  color: #28a745;
+  color: #df3a7f;
 }
 .billDate,
 .billStatus {
@@ -140,6 +144,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
 }
 .modalContent {
   background-color: #fff;
@@ -149,6 +154,9 @@
   text-align: center;
   max-width: 400px;
   width: 90%;
+  transform: translateY(-20px);
+  animation: slideIn 0.3s ease-out forwards;
+  position: relative;
 }
 .modalButtons {
   margin-top: 20px;
@@ -169,4 +177,49 @@
 }
 .cancelButton:hover {
   background-color: #5a6268;
+}
+
+/* Form Group for inputs in Edit Modal */
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 8px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #495057;
+  background: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box; /* Ensure padding doesn't increase width */
+}
+
+.input:focus,
+.select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-30px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }

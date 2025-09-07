@@ -63,6 +63,10 @@
   border-bottom: 2px solid var(--primary-light);
 }
 
+.billsTable th:last-child, .billsTable td:last-child {
+  text-align: right;
+}
+
 .status {
   padding: 0.3rem 0.8rem;
   border-radius: 16px;
@@ -107,6 +111,19 @@
   background: var(--surface);
   color: var(--text-main);
   font-family: var(--font-family);
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--primary-light);
+}
+
+.totalAmount {
+  font-weight: 600;
 }
 
 @media (max-width: 800px) {

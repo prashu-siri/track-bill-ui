@@ -1,6 +1,36 @@
+.container {
+  background: #eef3fa; /* Modern soft blue background */
+  font-family: var(--font-family);
+  min-height: 100vh;
+  color: var(--text-main);
+}
+.title{
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  padding-top: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.subTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-left: 2rem;
+}
+.loading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  padding-top: 2rem;
+  text-align: center;
+}
 .billList {
   list-style-type: none;
   padding: 0;
+  box-shadow: 1px 5px 15px rgba(0, 0, 0, 0.25);
+  margin: 1rem 2rem;
+  border-radius: 10px;
 }
 .billItem {
   display: flex;
@@ -15,7 +45,8 @@
 .billInfo,
 .billDetails {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 0.5rem;
   margin-bottom: 8px;
 }
 .billType {
@@ -30,6 +61,10 @@
 .billStatus {
   font-size: 0.9em;
   color: #6c757d;
+}
+.billActions {
+  display: flex;
+  gap: 10px;
 }
 .paid {
   color: #28a745;

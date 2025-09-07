@@ -10,13 +10,7 @@
   --text-label: #1e2a78;
   --error: #d32f2f;
   --font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --border: #a9a9a9;
 }
 
 html,

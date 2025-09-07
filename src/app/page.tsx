@@ -55,15 +55,40 @@ export default function Home() {
 	const [selectedMonth, setSelectedMonth] = useState<string>("");
 	const [selectedYear, setSelectedYear] = useState<string>("");
 
+	const mockData: Bill[] = [
+		{
+			id: 3,
+			date: "2025-09-03",
+			status: "paid",
+			type: "Amazon Credit Card",
+			amount: "3919",
+		},
+		{
+			id: 4,
+			date: "2025-09-03",
+			status: "paid",
+			type: "ICICI credit card",
+			amount: "31627.85",
+		},
+		{
+			id: 5,
+			date: "2025-10-05",
+			status: "paid",
+			type: "Electricity ",
+			amount: "84",
+		},
+	];
+
 	useEffect(() => {
 		// Replace with your actual API endpoint
-
-		fetch("https://track-bill-api.onrender.com/api/bills")
-			.then((res) => res.json())
-			.then((data) => {
-				setBills(data);
-				setLoading(false);
-			});
+		setBills(mockData);
+		setLoading(false);
+		// fetch("https://track-bill-api.onrender.com/api/bills")
+		// 	.then((res) => res.json())
+		// 	.then((data) => {
+		// 		setBills(data);
+		// 		setLoading(false);
+		// 	});
 	}, []);
 
 	const years = getUniqueYears(bills);
@@ -85,6 +110,21 @@ export default function Home() {
 		style: "currency",
 		currency: "INR",
 	});
+
+	const calculateTotal = (bills: Bill[], month: string) => {
+		const total = bills.reduce(
+			(sum, bill) => sum + parseFloat(bill.amount),
+			0
+		);
+		return (
+			<div className={styles.total}>
+				<span>Total for {month}</span>
+				<span className={styles.totalAmount}>
+					{formatter.format(total)}
+				</span>
+			</div>
+		);
+	};
 
 	return (
 		<div className={styles.page}>
@@ -134,8 +174,8 @@ export default function Home() {
 										<tr>
 											<th>Date</th>
 											<th>Type</th>
-											<th>Amount</th>
 											<th>Status</th>
+											<th>Amount</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -147,11 +187,6 @@ export default function Home() {
 													).toLocaleDateString()}
 												</td>
 												<td>{bill.type}</td>
-												<td>
-													{formatter.format(
-														parseFloat(bill.amount)
-													)}
-												</td>
 												<td>
 													<span
 														className={`${
@@ -168,10 +203,16 @@ export default function Home() {
 															)}
 													</span>
 												</td>
+												<td>
+													{formatter.format(
+														parseFloat(bill.amount)
+													)}
+												</td>
 											</tr>
 										))}
 									</tbody>
 								</table>
+								<>{calculateTotal(bills, month)}</>
 							</div>
 						))}
 						{Object.keys(groupedBills).length === 0 && (

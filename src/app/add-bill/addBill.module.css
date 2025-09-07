@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--background);
+  background: #eef3fa;
 }
 
 .form {
@@ -43,7 +43,7 @@
 
 .input {
   padding: 0.7rem 1rem;
-  border: 1px solid var(--primary-light);
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 1rem;
   background: #f9fbfc;

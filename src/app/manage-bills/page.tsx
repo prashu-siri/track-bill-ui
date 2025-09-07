@@ -20,58 +20,34 @@ const ManageBillsPage = () => {
 	const [errorMessage, setErrorMessage] = useState("");
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [billToDelete, setBillToDelete] = useState<number | null>(null);
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [billToEdit, setBillToEdit] = useState<Bill | null>(null);
+	const [editFormData, setEditFormData] = useState<Bill | null>(null);
 	const [editMessage, setEditMessage] = useState("");
-
-	const mockData: Bill[] = [
-		{
-			id: 3,
-			date: "2025-09-03",
-			status: "paid",
-			type: "Amazon Credit Card",
-			amount: "3919",
-		},
-		{
-			id: 4,
-			date: "2025-09-03",
-			status: "paid",
-			type: "ICICI credit card",
-			amount: "31627.85",
-		},
-		{
-			id: 5,
-			date: "2025-10-05",
-			status: "paid",
-			type: "Electricity ",
-			amount: "84",
-		},
-	];
 
 	const fetchBills = async () => {
 		setLoading(true);
-		setError(null);
+		setError(null); // Uncomment below to fetch from actual API
 
-		setBills(mockData);
-		setLoading(false);
-		// Uncomment below to fetch from actual API
-		// try {
-		// 	const response = await fetch(
-		// 		"https://track-bill-api.onrender.com/api/bills"
-		// 	);
-		// 	if (!response.ok) {
-		// 		throw new Error(`HTTP error! Status: ${response.status}`);
-		// 	}
-		// 	const data = await response.json();
-		// 	setBills(data);
-		// } catch (err: unknown) {
-		// 	if (err instanceof Error) {
-		// 		console.error("Failed to fetch bills:", err);
-		// 	}
-		// 	setError(
-		// 		"Failed to fetch bills. Please check the network connection and API status."
-		// 	);
-		// } finally {
-		// 	setLoading(false);
-		// }
+		try {
+			const response = await fetch(
+				"https://track-bill-api.onrender.com/api/bills"
+			);
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			setBills(data);
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				console.error("Failed to fetch bills:", err);
+			}
+			setError(
+				"Failed to fetch bills. Please check the network connection and API status."
+			);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	function groupBillsByMonth(bills: Bill[]) {
@@ -129,14 +105,65 @@ const ManageBillsPage = () => {
 		setBillToDelete(null);
 	};
 
-	const handleEdit = (bill: Bill) => {
-		setEditMessage(
-			`This is where you would edit the bill for: ${
-				bill.type
-			} on ${new Date(bill.date).toLocaleDateString()}`
-		);
+	const handleEditClick = (bill: Bill) => {
+		setBillToEdit(bill);
+		setEditFormData(bill);
+		setIsEditModalOpen(true);
 		setSuccessMessage("");
 		setErrorMessage("");
+	};
+
+	const handleEditChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => {
+		const { name, value } = e.target;
+		setEditFormData((prevData) =>
+			prevData ? { ...prevData, [name]: value } : null
+		);
+	};
+
+	const handleSaveEdit = async () => {
+		if (!editFormData || !billToEdit) return;
+
+		try {
+			setEditMessage("Saving changes...");
+			const response = await fetch(
+				`https://track-bill-api.onrender.com/api/bills/${billToEdit.id}`,
+				{
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(editFormData),
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("Failed to update bill");
+			}
+
+			setSuccessMessage("Bill updated successfully!");
+			setErrorMessage("");
+			setIsEditModalOpen(false);
+			setBillToEdit(null);
+			fetchBills(); // Re-fetch the bills to get the updated list
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				setErrorMessage(err.message);
+			} else {
+				setErrorMessage("Failed to update bill. Please try again.");
+			}
+			setSuccessMessage("");
+		}
+	};
+
+	const handleCancelEdit = () => {
+		setIsEditModalOpen(false);
+		setBillToEdit(null);
+		setEditFormData(null);
+		setEditMessage("");
+		setErrorMessage("");
+		setSuccessMessage("");
 	};
 
 	if (loading) {
@@ -231,14 +258,16 @@ const ManageBillsPage = () => {
 															styles.billAmount
 														}
 													>
-														Amount: {bill.amount}
+														{" "}
+														Amount:
+														{bill.amount}
 													</span>
 													<span
 														className={
 															styles.billDate
 														}
 													>
-														Date:{" "}
+														Date:
 														{new Date(
 															bill.date
 														).toLocaleDateString()}
@@ -246,14 +275,15 @@ const ManageBillsPage = () => {
 													<span
 														className={`billStatus ${bill.status}`.toLowerCase()}
 													>
-														Status: {bill.status}
+														Status:
+														{bill.status}
 													</span>
 												</div>
 											</div>
 											<div className={styles.billActions}>
 												<button
 													onClick={() =>
-														handleEdit(bill)
+														handleEditClick(bill)
 													}
 													className={
 														styles.button +
@@ -285,6 +315,7 @@ const ManageBillsPage = () => {
 						))}
 					</>
 				)}
+
 				{isDeleteModalOpen && (
 					<div className={styles.modalOverlay}>
 						<div className={styles.modalContent}>
@@ -311,6 +342,99 @@ const ManageBillsPage = () => {
 									Cancel
 								</button>
 							</div>
+						</div>
+					</div>
+				)}
+				{isEditModalOpen && editFormData && (
+					<div className={styles.modalOverlay}>
+						<div className={styles.modalContent}>
+							<h3>Edit Bill</h3>
+							{errorMessage && (
+								<div className={styles.errorMessage}>
+									{errorMessage}
+								</div>
+							)}
+							{editMessage && (
+								<div className={styles.infoMessage}>
+									{editMessage}
+								</div>
+							)}
+							<form
+								onSubmit={(e) => {
+									e.preventDefault();
+									handleSaveEdit();
+								}}
+							>
+								<div className={styles.formGroup}>
+									<label>Type:</label>
+									<input
+										type="text"
+										name="type"
+										value={editFormData.type}
+										onChange={handleEditChange}
+										className={styles.input}
+										required
+									/>
+								</div>
+								<div className={styles.formGroup}>
+									<label>Amount:</label>
+									<input
+										type="text"
+										name="amount"
+										value={editFormData.amount}
+										onChange={handleEditChange}
+										className={styles.input}
+										required
+									/>
+								</div>
+								<div className={styles.formGroup}>
+									<label>Date:</label>
+									<input
+										type="date"
+										name="date"
+										value={editFormData.date}
+										onChange={handleEditChange}
+										className={styles.input}
+										required
+									/>
+								</div>
+								<div className={styles.formGroup}>
+									<label>Status:</label>
+									<select
+										name="status"
+										value={editFormData.status}
+										onChange={handleEditChange}
+										className={styles.select}
+									>
+										<option value="paid">Paid</option>
+										<option value="unpaid">Unpaid</option>
+										<option value="pending">Pending</option>
+									</select>
+								</div>
+								<div className={styles.modalButtons}>
+									<button
+										type="submit"
+										className={
+											styles.button +
+											" " +
+											styles.confirmButton
+										}
+									>
+										Save
+									</button>
+									<button
+										type="button"
+										onClick={handleCancelEdit}
+										className={
+											styles.button +
+											" " +
+											styles.cancelButton
+										}
+									>
+										Cancel
+									</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				)}

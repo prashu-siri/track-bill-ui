@@ -25,89 +25,28 @@
   padding-top: 2rem;
   text-align: center;
 }
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin: 0 2rem 2rem;
+  justify-content: center;
+  position: relative; /* Create a stacking context */
+  z-index: 10; /* Ensure filters are on top of the bill list */
+}
+.filterSelect {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 1rem;
+  color: var(--text-main);
+}
 .billList {
   list-style-type: none;
   padding: 0;
   margin: 1rem 2rem;
-  display: flex;
+  display: grid;
   gap: 1rem;
-}
-.billItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  border-bottom: 1px solid #eee;
-  box-shadow: 1px 5px 15px rgba(0,0,0,0.15);
-  border-radius: 10px;
-  background-color: #fff;
-}
-.billItem:last-child {
-  border-bottom: none;
-}
-.billInfo,
-.billDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 8px;
-}
-.billType {
-  font-weight: bold;
-}
-.billAmount {
-  font-weight: bold;
-  color: #df3a7f;
-}
-.billDate,
-.billStatus {
-  font-size: 0.9em;
-  color: #6c757d;
-}
-.billActions {
-  display: flex;
-  gap: 10px;
-}
-.paid {
-  color: #28a745;
-  font-weight: bold;
-}
-.unpaid {
-  color: #dc3545;
-  font-weight: bold;
-}
-.pending {
-  color: #ffc107;
-  font-weight: bold;
-}
-.buttonGroup {
-  display: flex;
-  gap: 10px;
-}
-.button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9em;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-.editButton {
-  background-color: #007bff;
-  color: #fff;
-}
-.editButton:hover {
-  background-color: #0056b3;
-}
-.deleteButton {
-  background-color: #dc3545;
-  color: #fff;
-}
-.deleteButton:hover {
-  background-color: #c82333;
 }
 .successMessage {
   background-color: #d4edda;
@@ -132,6 +71,16 @@
   border-radius: 4px;
   margin-bottom: 20px;
   text-align: center;
+}
+.noBillsMessage {
+  text-align: center;
+  padding: 2rem;
+  margin: 2rem;
+  background-color: #fff;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  color: #666;
+  font-size: 1.1rem;
 }
 .modalOverlay {
   position: fixed;
@@ -163,20 +112,6 @@
   display: flex;
   justify-content: center;
   gap: 10px;
-}
-.confirmButton {
-  background-color: #dc3545;
-  color: #fff;
-}
-.confirmButton:hover {
-  background-color: #c82333;
-}
-.cancelButton {
-  background-color: #6c757d;
-  color: #fff;
-}
-.cancelButton:hover {
-  background-color: #5a6268;
 }
 
 /* Form Group for inputs in Edit Modal */
@@ -222,4 +157,171 @@
 @keyframes slideIn {
   from { transform: translateY(-30px) scale(0.95); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.billItem {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 16px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	margin-bottom: 16px;
+	background-color: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.billInfo {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin-bottom: 12px;
+}
+
+.billPrimaryInfo,
+.billSecondaryInfo {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+
+.billPrimaryInfo {
+	margin-bottom: 8px;
+}
+
+.billType {
+	font-weight: bold;
+	font-size: 1.1rem;
+	color: #333;
+	margin-right: 16px;
+	flex-grow: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.billAmount {
+	font-weight: bold;
+	font-size: 1.1rem;
+	color: #0070f3;
+	white-space: nowrap;
+}
+
+.billDate {
+	font-size: 0.9rem;
+	color: #666;
+}
+
+.billStatus {
+	font-size: 0.9rem;
+	font-weight: 500;
+	padding: 4px 8px;
+	border-radius: 12px;
+	text-transform: capitalize;
+}
+
+.paid {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.unpaid {
+	background-color: #f8d7da;
+	color: #721c24;
+}
+
+.pending {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+.billActions {
+	display: flex;
+	gap: 8px;
+	width: 100%;
+}
+
+.button {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.editButton {
+  background-color: #007bff;
+  color: #fff;
+}
+.editButton:hover {
+  background-color: #0069d9;
+}
+
+.deleteButton {
+  background-color: #e0e0e0;
+  color: #333;
+}
+.deleteButton:hover {
+  background-color: #d5d5d5;
+}
+
+.saveButton, .confirmButton {
+  background-color: #28a745;
+  color: white;
+}
+.saveButton:hover, .confirmButton:hover {
+  background-color: #218838;
+}
+.cancelButton {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+@media (max-width: 599px) {
+	.billList {
+		margin: 1rem;
+	}
+}
+/* Responsive styles for larger screens */
+@media (min-width: 600px) {
+	.billItem {
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.billInfo {
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 0;
+		margin-right: 16px;
+	}
+
+	.billPrimaryInfo {
+		margin-bottom: 0;
+		margin-right: 16px;
+		gap: 16px;
+	}
+
+	.billSecondaryInfo {
+		gap: 16px;
+	}
+
+	.billActions {
+		width: auto;
+	}
+
+	.button {
+		width: auto;
+	}
 }

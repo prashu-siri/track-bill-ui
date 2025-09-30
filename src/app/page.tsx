@@ -65,14 +65,14 @@ export default function Home() {
 		},
 		{
 			id: 4,
-			date: "2025-09-03",
+			date: "2025-09-01",
 			status: "paid",
 			type: "ICICI credit card",
 			amount: "31627.85",
 		},
 		{
 			id: 5,
-			date: "2025-10-05",
+			date: "2025-01-05",
 			status: "paid",
 			type: "Electricity ",
 			amount: "84",
@@ -166,55 +166,78 @@ export default function Home() {
 					<div>Loading...</div>
 				) : (
 					<div className={styles.dashboard}>
-						{Object.entries(groupedBills).map(([month, bills]) => (
-							<div key={month} className={styles.monthCard}>
-								<h2 className={styles.monthTitle}>{month}</h2>
-								<table className={styles.billsTable}>
-									<thead>
-										<tr>
-											<th>Date</th>
-											<th>Type</th>
-											<th>Status</th>
-											<th>Amount</th>
-										</tr>
-									</thead>
-									<tbody>
-										{bills.map((bill) => (
-											<tr key={bill.id}>
-												<td>
-													{new Date(
-														bill.date
-													).toLocaleDateString()}
-												</td>
-												<td>{bill.type}</td>
-												<td>
-													<span
-														className={`${
-															styles.status
-														} ${
-															styles[bill.status]
-														}`}
-													>
-														{bill.status
-															.charAt(0)
-															.toUpperCase() +
-															bill.status.slice(
-																1
-															)}
-													</span>
-												</td>
-												<td>
-													{formatter.format(
-														parseFloat(bill.amount)
-													)}
-												</td>
+						{Object.entries(groupedBills)
+							.sort(
+								([monthA], [monthB]) =>
+									new Date(monthA).getTime() -
+									new Date(monthB).getTime()
+							)
+							.map(([month, bills]) => (
+								<div key={month} className={styles.monthCard}>
+									<h2 className={styles.monthTitle}>
+										{month}
+									</h2>
+									<table className={styles.billsTable}>
+										<thead>
+											<tr>
+												<th>Date</th>
+												<th>Type</th>
+												<th>Status</th>
+												<th>Amount</th>
 											</tr>
-										))}
-									</tbody>
-								</table>
-								<>{calculateTotal(bills, month)}</>
-							</div>
-						))}
+										</thead>
+										<tbody>
+											{bills
+												.sort(
+													(a, b) =>
+														new Date(
+															a.date
+														).getTime() -
+														new Date(
+															b.date
+														).getTime()
+												)
+												.map((bill) => (
+													<tr key={bill.id}>
+														<td>
+															{new Date(
+																bill.date
+															).toLocaleDateString()}
+														</td>
+														<td>{bill.type}</td>
+														<td>
+															<span
+																className={`${
+																	styles.status
+																} ${
+																	styles[
+																		bill
+																			.status
+																	]
+																}`}
+															>
+																{bill.status
+																	.charAt(0)
+																	.toUpperCase() +
+																	bill.status.slice(
+																		1
+																	)}
+															</span>
+														</td>
+														<td>
+															{formatter.format(
+																parseFloat(
+																	bill.amount
+																)
+															)}
+														</td>
+													</tr>
+												))}
+										</tbody>
+									</table>
+									<>{calculateTotal(bills, month)}</>
+								</div>
+							))}
 						{Object.keys(groupedBills).length === 0 && (
 							<div>No bills found for selected filters.</div>
 						)}

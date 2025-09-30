@@ -12,6 +12,30 @@ interface Bill {
 	amount: string;
 }
 
+const MONTHS = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+];
+
+function getUniqueYears(bills: Bill[]) {
+	const years = new Set<string>();
+	bills.forEach((bill) => {
+		const date = new Date(bill.date);
+		years.add(date.getFullYear().toString());
+	});
+	return Array.from(years).sort((a, b) => parseInt(b) - parseInt(a)); // Sort descending
+}
+
 const ManageBillsPage = () => {
 	const [bills, setBills] = useState<Bill[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -24,6 +48,8 @@ const ManageBillsPage = () => {
 	const [billToEdit, setBillToEdit] = useState<Bill | null>(null);
 	const [editFormData, setEditFormData] = useState<Bill | null>(null);
 	const [editMessage, setEditMessage] = useState("");
+	const [selectedMonth, setSelectedMonth] = useState<string>("");
+	const [selectedYear, setSelectedYear] = useState<string>("");
 
 	const mockData: Bill[] = [
 		{
@@ -59,29 +85,28 @@ const ManageBillsPage = () => {
 		setError(null);
 
 		// Uncomment below to fetch from mock
-		// setBills(mockData);
-		// setLoading(false);
-		// setLoading(false);
+		setBills(mockData);
+		setLoading(false);
 
-		try {
-			const response = await fetch(
-				"https://track-bill-api.onrender.com/api/bills"
-			);
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-			const data = await response.json();
-			setBills(data);
-		} catch (err: unknown) {
-			if (err instanceof Error) {
-				console.error("Failed to fetch bills:", err);
-			}
-			setError(
-				"Failed to fetch bills. Please check the network connection and API status."
-			);
-		} finally {
-			setLoading(false);
-		}
+		// try {
+		// 	const response = await fetch(
+		// 		"https://track-bill-api.onrender.com/api/bills"
+		// 	);
+		// 	if (!response.ok) {
+		// 		throw new Error(`HTTP error! Status: ${response.status}`);
+		// 	}
+		// 	const data = await response.json();
+		// 	setBills(data);
+		// } catch (err: unknown) {
+		// 	if (err instanceof Error) {
+		// 		console.error("Failed to fetch bills:", err);
+		// 	}
+		// 	setError(
+		// 		"Failed to fetch bills. Please check the network connection and API status."
+		// 	);
+		// } finally {
+		// 	setLoading(false);
+		// }
 	};
 
 	function groupBillsByMonth(bills: Bill[]) {
@@ -97,7 +122,19 @@ const ManageBillsPage = () => {
 		return groups;
 	}
 
-	const groupedBills = groupBillsByMonth(bills);
+	const years = getUniqueYears(bills);
+
+	const filteredBills = bills.filter((bill) => {
+		const date = new Date(bill.date);
+		const monthMatch =
+			!selectedMonth ||
+			date.toLocaleString("default", { month: "long" }) === selectedMonth;
+		const yearMatch =
+			!selectedYear || date.getFullYear().toString() === selectedYear;
+		return monthMatch && yearMatch;
+	});
+
+	const groupedBills = groupBillsByMonth(filteredBills);
 
 	useEffect(() => {
 		fetchBills();
@@ -260,98 +297,144 @@ const ManageBillsPage = () => {
 				{errorMessage && (
 					<div className={styles.errorMessage}>{errorMessage}</div>
 				)}
-				{editMessage && (
-					<div className={styles.infoMessage}>{editMessage}</div>
-				)}
-				{bills.length === 0 ? (
-					<p>No bills found. Add one from the Add Bill page.</p>
+				<div className={styles.filters}>
+					<select
+						value={selectedMonth}
+						onChange={(e) => setSelectedMonth(e.target.value)}
+						className={styles.filterSelect}
+					>
+						<option value="">All Months</option>
+						{MONTHS.map((month) => (
+							<option key={month} value={month}>
+								{month}
+							</option>
+						))}
+					</select>
+					<select
+						value={selectedYear}
+						onChange={(e) => setSelectedYear(e.target.value)}
+						className={styles.filterSelect}
+					>
+						<option value="">All Years</option>
+						{years.map((year) => (
+							<option key={year} value={year}>
+								{year}
+							</option>
+						))}
+					</select>
+				</div>
+				{filteredBills.length === 0 ? (
+					<p className={styles.noBillsMessage}>
+						No bills found for the selected filters. Add one from
+						the Add Bill page.
+					</p>
 				) : (
 					<>
-						{Object.entries(groupedBills).map(([month, bills]) => (
-							<div key={month}>
-								<h3 className={styles.subTitle}>{month}</h3>
-								<ul className={styles.billList}>
-									{bills.map((bill: Bill) => (
-										<li
-											key={bill.id}
-											className={styles.billItem}
-										>
-											<div>
-												<div
-													className={styles.billInfo}
+						{Object.entries(groupedBills).map(
+							([month, monthBills]) => (
+								<div key={month}>
+									<h3 className={styles.subTitle}>{month}</h3>
+									<ul className={styles.billList}>
+										{monthBills
+											.sort(
+												(a, b) =>
+													new Date(b.date).getTime() -
+													new Date(a.date).getTime()
+											)
+											.map((bill: Bill) => (
+												<li
+													key={bill.id}
+													className={styles.billItem}
 												>
-													<span
+													<div
 														className={
-															styles.billType
+															styles.billInfo
 														}
 													>
-														{bill.type}
-													</span>
-													<span
+														<div
+															className={
+																styles.billPrimaryInfo
+															}
+														>
+															<span
+																className={
+																	styles.billType
+																}
+															>
+																{bill.type}
+															</span>
+															<span
+																className={
+																	styles.billAmount
+																}
+															>
+																{formatter.format(
+																	parseFloat(
+																		bill.amount
+																	)
+																)}
+															</span>
+														</div>
+														<div
+															className={
+																styles.billSecondaryInfo
+															}
+														>
+															<span
+																className={
+																	styles.billDate
+																}
+															>
+																{new Date(
+																	bill.date
+																).toLocaleDateString()}
+															</span>
+															<span
+																className={`${
+																	styles.billStatus
+																} ${
+																	styles[
+																		bill
+																			.status
+																	]
+																}`}
+															>
+																{bill.status}
+															</span>
+														</div>
+													</div>
+													<div
 														className={
-															styles.billAmount
+															styles.billActions
 														}
 													>
-														{formatter.format(
-															parseFloat(
-																bill.amount
-															)
-														)}
-													</span>
-													<span
-														className={
-															styles.billDate
-														}
-													>
-														Date:
-														{new Date(
-															bill.date
-														).toLocaleDateString()}
-													</span>
-													<span
-														className={
-															styles.billStatus +
-															" " +
-															`${bill.status}`.toLowerCase()
-														}
-													>
-														{bill.status.toUpperCase()}
-													</span>
-												</div>
-											</div>
-											<div className={styles.billActions}>
-												<button
-													onClick={() =>
-														handleEditClick(bill)
-													}
-													className={
-														styles.button +
-														" " +
-														styles.editButton
-													}
-												>
-													Edit
-												</button>
-												<button
-													onClick={() =>
-														handleDeleteClick(
-															bill.id
-														)
-													}
-													className={
-														styles.button +
-														" " +
-														styles.deleteButton
-													}
-												>
-													Delete
-												</button>
-											</div>
-										</li>
-									))}
-								</ul>
-							</div>
-						))}
+														<button
+															onClick={() =>
+																handleEditClick(
+																	bill
+																)
+															}
+															className={`${styles.button} ${styles.editButton}`}
+														>
+															Edit
+														</button>
+														<button
+															onClick={() =>
+																handleDeleteClick(
+																	bill.id
+																)
+															}
+															className={`${styles.button} ${styles.deleteButton}`}
+														>
+															Delete
+														</button>
+													</div>
+												</li>
+											))}
+									</ul>
+								</div>
+							)
+						)}
 					</>
 				)}
 
@@ -453,11 +536,7 @@ const ManageBillsPage = () => {
 								<div className={styles.modalButtons}>
 									<button
 										type="submit"
-										className={
-											styles.button +
-											" " +
-											styles.confirmButton
-										}
+										className={`${styles.button} ${styles.saveButton}`}
 									>
 										Save
 									</button>

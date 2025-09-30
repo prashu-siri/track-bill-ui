@@ -1,10 +1,6 @@
 .navbar {
-  width: 100vw;
-  min-width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
+  width: 100%;
+  padding: 0 1.5rem;
   background: var(--surface);
   color: var(--primary);
   box-shadow: 0 4px 16px rgba(30, 42, 120, 0.08), 0 1.5px 4px rgba(30, 42, 120, 0.04);
@@ -13,31 +9,42 @@
   z-index: 100;
 }
 
-.navText {
-  font-size: 1.3rem;
-  font-weight: 600;
+.navContainer {
+  width: 100%;
+  max-width: 1200px; /* Match the max-width of your main content */
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.navBrand {
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--primary);
+  letter-spacing: -0.5px;
 }
 
 .navLinks {
   display: flex;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .navLink {
   color: var(--primary);
   text-decoration: none;
   font-weight: 500;
-  font-size: 1.1rem;
-  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 6px;
-  transition: background 0.2s, color 0.2s;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   background: transparent;
   border: none;
   cursor: pointer;
 }
 
 .navLink:hover {
-  background: var(--accent);
-  color: var(--surface);
+  background-color: var(--primary-light);
+  color: var(--primary);
 }

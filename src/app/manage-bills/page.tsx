@@ -85,28 +85,28 @@ const ManageBillsPage = () => {
 		setError(null);
 
 		// Uncomment below to fetch from mock
-		setBills(mockData);
-		setLoading(false);
+		// setBills(mockData);
+		// setLoading(false);
 
-		// try {
-		// 	const response = await fetch(
-		// 		"https://track-bill-api.onrender.com/api/bills"
-		// 	);
-		// 	if (!response.ok) {
-		// 		throw new Error(`HTTP error! Status: ${response.status}`);
-		// 	}
-		// 	const data = await response.json();
-		// 	setBills(data);
-		// } catch (err: unknown) {
-		// 	if (err instanceof Error) {
-		// 		console.error("Failed to fetch bills:", err);
-		// 	}
-		// 	setError(
-		// 		"Failed to fetch bills. Please check the network connection and API status."
-		// 	);
-		// } finally {
-		// 	setLoading(false);
-		// }
+		try {
+			const response = await fetch(
+				"https://track-bill-api.onrender.com/api/bills"
+			);
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			setBills(data);
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				console.error("Failed to fetch bills:", err);
+			}
+			setError(
+				"Failed to fetch bills. Please check the network connection and API status."
+			);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	function groupBillsByMonth(bills: Bill[]) {

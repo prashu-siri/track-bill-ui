@@ -330,9 +330,17 @@ const ManageBillsPage = () => {
 					</p>
 				) : (
 					<>
-						{Object.entries(groupedBills).map(
-							([month, monthBills]) => (
-								<div key={month}>
+						{Object.entries(groupedBills)
+							.sort(
+								([monthA], [monthB]) =>
+									new Date(monthB).getTime() -
+									new Date(monthA).getTime()
+							)
+							.map(([month, monthBills]) => (
+								<div
+									key={month}
+									className={styles.monthSection}
+								>
 									<h3 className={styles.subTitle}>{month}</h3>
 									<ul className={styles.billList}>
 										{monthBills
@@ -433,8 +441,7 @@ const ManageBillsPage = () => {
 											))}
 									</ul>
 								</div>
-							)
-						)}
+							))}
 					</>
 				)}
 

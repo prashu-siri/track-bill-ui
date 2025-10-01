@@ -11,6 +11,12 @@
   --error: #d32f2f;
   --font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
   --border: #a9a9a9;
+  --due-color: #c62828; /* Deep red for high priority due */
+  --due-bg: #ffeaea;
+  --paid-color: #2e7d32; /* Deep green for paid */
+  --paid-bg: #e0f7e9;
+  --pending-color: #f9a825; /* Amber for pending */
+  --pending-bg: #fff8e1;
 }
 
 html,

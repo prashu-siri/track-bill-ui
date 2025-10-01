@@ -239,8 +239,14 @@ export default function Home() {
 	];
 
 	useEffect(() => {
-		setBills(mockData);
-		setLoading(false);
+		// setBills(mockData);
+		// setLoading(false);
+		fetch("https://track-bill-api.onrender.com/api/bills")
+			.then((res) => res.json())
+			.then((data) => {
+				setBills(data);
+				setLoading(false);
+			});
 	}, []);
 
 	const years = getUniqueYears(bills);

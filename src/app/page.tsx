@@ -169,8 +169,8 @@ export default function Home() {
 						{Object.entries(groupedBills)
 							.sort(
 								([monthA], [monthB]) =>
-									new Date(monthA).getTime() -
-									new Date(monthB).getTime()
+									new Date(monthB).getTime() -
+									new Date(monthA).getTime()
 							)
 							.map(([month, bills]) => (
 								<div key={month} className={styles.monthCard}>

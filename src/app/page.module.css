@@ -148,5 +148,8 @@
   .monthCard {
     padding: 0.5rem;
     border-radius: 10px;
+    /* Add horizontal margin for mobile view */
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 }
